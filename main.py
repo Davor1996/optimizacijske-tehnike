@@ -42,8 +42,11 @@ optimized__list_time_solved = []
 
 after_removing_xth_element_has_better_result = [0]*num_of_items
 after_removing_xth_element_is_optimal = [0]*num_of_items
+after_removing_xth_element_is_optimal_when_dantzig_is_not_optimal = [0]*num_of_items
+
 after_removing_xth_element_has_better_result_reversed = [0]*num_of_items
 after_removing_xth_element_is_optimal_reversed = [0]*num_of_items
+after_removing_xth_element_is_optimal_when_dantzig_is_not_optimal_reversed = [0]*num_of_items
 
 
 # Functions
@@ -58,7 +61,7 @@ def generate_random_items(rand_values, rand_weights, rand_capacity, len=10):
     return items, capacity
 
 def solve_given_knapsack(items, capacity, verbose=False):
-    global dantzig_optimal, optimal_lenght, greedy_lenght, optimized_lenght, all_optimized_optimal, all_optimized_better, after_removing_xth_element_has_better_result, after_removing_xth_element_is_optimal, after_removing_xth_element_has_better_result_reversed, after_removing_xth_element_is_optimal_reversed
+    global dantzig_optimal, optimal_lenght, greedy_lenght, optimized_lenght, all_optimized_optimal, all_optimized_better, after_removing_xth_element_has_better_result, after_removing_xth_element_is_optimal, after_removing_xth_element_has_better_result_reversed, after_removing_xth_element_is_optimal_reversed, after_removing_xth_element_is_optimal_when_dantzig_is_not_optimal, after_removing_xth_element_is_optimal_when_dantzig_is_not_optimal_reversed
     #print(items)
 
     optimal_start = time.time_ns()
@@ -106,6 +109,9 @@ def solve_given_knapsack(items, capacity, verbose=False):
             all_optimized_optimal = all_optimized_optimal+1
             after_removing_xth_element_is_optimal[i]=after_removing_xth_element_is_optimal[i]+1
             after_removing_xth_element_is_optimal_reversed[len(greedy_knapsack)-1-i]=after_removing_xth_element_is_optimal_reversed[len(greedy_knapsack)-1-i]+1
+        if optimized_value == optimal_value and greedy_value != optimal_value:
+            after_removing_xth_element_is_optimal_when_dantzig_is_not_optimal[i]=after_removing_xth_element_is_optimal_when_dantzig_is_not_optimal[i]+1
+            after_removing_xth_element_is_optimal_when_dantzig_is_not_optimal_reversed[len(greedy_knapsack)-1-i]=after_removing_xth_element_is_optimal_when_dantzig_is_not_optimal_reversed[len(greedy_knapsack)-1-i]+1
 
         if verbose: #Will affect performance
             print(f'Element {i} removed')
@@ -170,8 +176,10 @@ print(f"Optimized lenght: {optimized_lenght/run_iterations}\n")
 print(f"-----------------[AFTER REMOVING Xth ELEMENT]-----------------")
 print(f"Better result: {after_removing_xth_element_has_better_result}")
 print(f"Optimal result: {after_removing_xth_element_is_optimal}")
+print(f"Optimal when dantzig is not optimal: {after_removing_xth_element_is_optimal_when_dantzig_is_not_optimal}")
 print(f"Better result reversed: {after_removing_xth_element_has_better_result_reversed}")
 print(f"Optimal result reversed: {after_removing_xth_element_is_optimal_reversed}")
+print(f"Optimal when dantzig is not optimal reversed: {after_removing_xth_element_is_optimal_when_dantzig_is_not_optimal_reversed}\n")
 
 print(f"-----------------[TIME STATS]-----------------")
 print(f"Optimal mean time: {np.mean(optimal_list_time_solved)}ns")
